@@ -99,6 +99,10 @@ $app->router->group([
     require __DIR__.'/../routes/web.php';
 });
 
-$app->bind('services', \App\Http\Services\ServiceFactory::class);
+$app->bind('services', function () {
+    return new \App\Http\Services\ServiceFactory(
+        new GuzzleHttp\Client
+    );
+});
 
 return $app;
