@@ -110,11 +110,13 @@ $app->bind('services', function () {
 
 $app->bind('cache', function () {
     $client = new Predis\Client([
-        'scheme' => 'tcp',
-        'host' => '127.0.0.1',
-        'port' => 6379,
-        'password' => ''
+        'scheme' => env('REDIS_SCHEME'),
+        'host' => env('REDIS_HOST'),
+        'port' => env('REDIS_PORT'),
+        'password' => env('REDIS_PASSWORD') ?: null
     ]);
+
+    return new App\Http\Cache\RedisAdapter($client);
 });
 
 return $app;
