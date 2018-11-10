@@ -2,8 +2,8 @@
 
 namespace App\Http\Services;
 
-use App\Http\Resources\HackerNewsResource;
 use App\Http\Services\Transformers\HackerNewsTransformer;
+use App\Http\Services\Transformers\RedditTransformer;
 use GuzzleHttp\Client as Guzzle;
 
 class ServiceFactory
@@ -29,6 +29,14 @@ class ServiceFactory
         $data = (new HackerNews($this->client))->get($limit);
 
         return (new HackerNewsTransformer($data))->create();
+    }
+
+    protected function reddit($limit = 10)
+    {
+        $data = (new Reddit($this->client))->get($limit);
+
+        return (new RedditTransformer($data))->create();
+
     }
 
     protected function sortResponseByTimestamp(array $data)
