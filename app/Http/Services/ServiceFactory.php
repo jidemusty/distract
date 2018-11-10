@@ -11,6 +11,12 @@ class ServiceFactory
 {
     protected $client;
 
+    protected $enabledServices = [
+        'hackernews',
+        'reddit',
+        'producthunt'
+    ];
+
     public function __construct(Guzzle $client)
     {
         $this->client = $client;
@@ -18,11 +24,13 @@ class ServiceFactory
 
     public function get($service, $limit = 10)
     {
-        if (method_exists($this, $service)) {
+        if (method_exists($this, $service) && $this->serviceIsEnabled($service)) {
             return $this->sortResponseByTimestamp(
                 $this->{$service}($limit)
             );
         }
+
+        return [];
     }
 
     protected function hackernews($limit = 10)
@@ -46,6 +54,11 @@ class ServiceFactory
 
         return (new ProductHuntTransformer($data))->create();
 
+    }
+
+    protected function serviceIsEnabled($service)
+    {
+        return in_array($service, $this->enabledServices);
     }
 
     protected function sortResponseByTimestamp(array $data)
