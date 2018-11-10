@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Http\Services\Transformers\HackerNewsTransformer;
+use App\Http\Services\Transformers\ProductHuntTransformer;
 use App\Http\Services\Transformers\RedditTransformer;
 use GuzzleHttp\Client as Guzzle;
 
@@ -36,6 +37,14 @@ class ServiceFactory
         $data = (new Reddit($this->client))->get($limit);
 
         return (new RedditTransformer($data))->create();
+
+    }
+
+    protected function producthunt($limit = 10)
+    {
+        $data = (new ProductHunt($this->client))->get($limit);
+
+        return (new ProductHuntTransformer($data))->create();
 
     }
 
