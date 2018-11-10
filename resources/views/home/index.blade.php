@@ -1,16 +1,14 @@
 @extends('app')
 
 @section('content')
-    <div class="item">
+    <div class="item" v-for="item in items">
         <h3 class="item__title">
-            <a href="#">Item title</a>
+            <a :href="`${ item.link }}`">@{{ item.title }}</a>
         </h3>
         <div class="item__service">
-            Product Hunt
+            @{{ item.service }}
         </div>
     </div>
-
-    @{{ name }}
 
     <div class="loading">
         One moment
