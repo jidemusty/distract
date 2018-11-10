@@ -11,6 +11,10 @@
 |
 */
 
+$router->get('/', function () {
+    return view('home.index');
+});
+
 $router->group(['prefix' => '/api'], function () use ($router) {
     $router->get('/news/{service}', 'Api\NewsController@index');
 });

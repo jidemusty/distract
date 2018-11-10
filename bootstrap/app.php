@@ -25,7 +25,7 @@ $app = new Laravel\Lumen\Application(
 
  $app->withFacades();
 
-// $app->withEloquent();
+ $app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------
@@ -81,6 +81,9 @@ $app->singleton(
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+$app->register(Illuminate\Redis\RedisServiceProvider::class);
+
+$app->configure('database');
 
 /*
 |--------------------------------------------------------------------------
@@ -103,6 +106,15 @@ $app->bind('services', function () {
     return new \App\Http\Services\ServiceFactory(
         new GuzzleHttp\Client
     );
+});
+
+$app->bind('cache', function () {
+    $client = new Predis\Client([
+        'scheme' => 'tcp',
+        'host' => '127.0.0.1',
+        'port' => 6379,
+        'password' => ''
+    ]);
 });
 
 return $app;
