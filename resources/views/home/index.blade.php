@@ -10,6 +10,8 @@
         </div>
     </div>
 
+    @{{ name }}
+
     <div class="loading">
         One moment
     </div>
