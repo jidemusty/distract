@@ -18,7 +18,9 @@ class ServiceFactory
     public function get($service, $limit = 10)
     {
         if (method_exists($this, $service)) {
-            return $this->{$service}($limit);
+            return $this->sortResponseByTimestamp(
+                $this->{$service}($limit)
+            );
         }
     }
 
@@ -27,5 +29,14 @@ class ServiceFactory
         $data = (new HackerNews($this->client))->get($limit);
 
         return (new HackerNewsTransformer($data))->create();
+    }
+
+    protected function sortResponseByTimestamp(array $data)
+    {
+        usort($data, function ($a, $b) {
+            return $a['timestamp'] - $b['timestamp'];
+        });
+
+        return $data;
     }
 }
