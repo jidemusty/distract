@@ -102,12 +102,6 @@ $app->router->group([
     require __DIR__.'/../routes/web.php';
 });
 
-$app->bind('services', function () {
-    return new \App\Http\Services\ServiceFactory(
-        new GuzzleHttp\Client
-    );
-});
-
 $app->bind('cache', function () {
     $client = new Predis\Client([
         'scheme' => env('REDIS_SCHEME'),
@@ -117,6 +111,14 @@ $app->bind('cache', function () {
     ]);
 
     return new App\Http\Cache\RedisAdapter($client);
+});
+
+
+$app->bind('services', function () {
+    return new \App\Http\Services\ServiceFactory(
+        new GuzzleHttp\Client,
+        app()->cache
+    );
 });
 
 return $app;

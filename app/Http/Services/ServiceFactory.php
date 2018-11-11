@@ -12,14 +12,17 @@ class ServiceFactory
 {
     protected $client;
 
+    protected $cache;
+
     protected $enabledServices = [
         'hackernews',
         'reddit',
         'producthunt'
     ];
 
-    public function __construct(Guzzle $client)
+    public function __construct(Guzzle $client, RedisAdapter $cache)
     {
+        $this->cache = $cache;
         $this->client = $client;
     }
 
@@ -36,24 +39,30 @@ class ServiceFactory
 
     protected function hackernews($limit = 10)
     {
-        $data = (new HackerNews($this->client))->get($limit);
+        $data = $this->cache->remember('hackernews', 10, function () use ($limit) {
+            return json_encode((new HackerNews($this->client))->get($limit));
+        });
 
-        return (new HackerNewsTransformer($data))->create();
+        return (new HackerNewsTransformer(json_decode($data)))->create();
     }
 
     protected function reddit($limit = 10)
     {
-        $data = (new Reddit($this->client))->get($limit);
+        $data = $this->cache->remember('reddit', 10, function () use ($limit) {
+            return json_encode((new Reddit($this->client))->get($limit));
+        });
 
-        return (new RedditTransformer($data))->create();
+        return (new RedditTransformer(json_decode($data)))->create();
 
     }
 
     protected function producthunt($limit = 10)
     {
-        $data = (new ProductHunt($this->client))->get($limit);
+        $data = $this->cache->remember('producthunt', 10, function () use ($limit) {
+            return json_encode((new ProductHunt($this->client))->get($limit));
+        });
 
-        return (new ProductHuntTransformer($data))->create();
+        return (new ProductHuntTransformer(json_decode($data)))->create();
 
     }
 
