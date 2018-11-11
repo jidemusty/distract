@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Cache\RedisAdapter;
 use App\Http\Services\Transformers\HackerNewsTransformer;
 use App\Http\Services\Transformers\ProductHuntTransformer;
 use App\Http\Services\Transformers\RedditTransformer;
