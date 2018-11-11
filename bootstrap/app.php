@@ -113,7 +113,6 @@ $app->bind('cache', function () {
     return new App\Http\Cache\RedisAdapter($client);
 });
 
-
 $app->bind('services', function ($app) {
     return new \App\Http\Services\ServiceFactory(
         new GuzzleHttp\Client,
