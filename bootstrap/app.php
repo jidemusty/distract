@@ -114,10 +114,10 @@ $app->bind('cache', function () {
 });
 
 
-$app->bind('services', function () {
+$app->bind('services', function ($app) {
     return new \App\Http\Services\ServiceFactory(
         new GuzzleHttp\Client,
-        app()->cache
+        $app->cache
     );
 });
 
