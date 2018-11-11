@@ -12,8 +12,6 @@
 */
 
 $router->get('/', function () {
-    dd(app()->cache->get('name'));
-    die();
     return view('home.index');
 });
 
