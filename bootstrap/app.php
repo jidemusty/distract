@@ -105,7 +105,7 @@ $app->router->group([
 $app->bind('cache', function () {
     $client = new Predis\Client([
         'scheme' => env('REDIS_SCHEME'),
-        'host' => env('REDISCLOUD_URL'),
+        'host' => env('REDIS_HOST'),
         'port' => env('REDIS_PORT'),
         'password' => env('REDIS_PASSWORD') ?: null
     ]);
